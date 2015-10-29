@@ -1,0 +1,49 @@
+=======================
+SUSHI WORDPRESS STARTER
+=======================
+
+Change Logs
+
+Version 3.0 - Official Release
+--------------------------------/
+
+Version 3.0.1 
+--------------------------------/
+
+* Wordpress Update
+  - updated to 3.7.1
+
+* Plugins Update
+  - ACF updated to version 4.3.0
+  - All In One SEO Pack updated to version 2.0.4.1
+  - Contact Form 7 updated to version 3.5.4
+  - Added Contact Form 7 Honeypot 1.2
+  - Added Really Simple Captcha 1.7
+
+* SWP Core
+  - Updated Sashimi theme to version 1.0.1
+    + login.php
+  - Updated swp_upload_dir function on links.php at line 19
+  - Added function: get_featured_img()
+
+* SWP sushi theme
+  - Added after_theme_setup action callback 
+    + functions.php
+  - Added swp_comments_validate function : jQuery
+    + global.js
+  - Added is_email function : jQuery
+    + global.js
+
+
+Version 3.1.0 
+--------------------------------/
+
+* SWP Core
+  - Hid Wordpress update notification on Dashboard
+  - Removed Updates menu
+  - Added filter for direct URL 
+
+* Revisioned files
+  - /wp-sushi/core.php
+  - /wp-sushi/functions.php
+  - /wp-sushi/version.php

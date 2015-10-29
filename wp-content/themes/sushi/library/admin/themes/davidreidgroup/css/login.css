@@ -1,0 +1,296 @@
+/*****************************
+* LOGIN STYLESHEET           *
+*****************************/
+
+* {
+	margin: 0;
+	padding: 0;
+	outline: none;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+html, body { min-height: 100%; -webkit-text-size-adjust: 100%; }
+
+body.login {
+	background: url("../images/sushi-bg-body.gif") 0 0 repeat #ffffff;
+	height: auto;
+}
+body.login h1 {
+	width: auto;
+	height: auto;
+}
+body.login form .input, body.login input[type="text"] {
+	line-height: normal;
+}
+.login #login_error, .login .message {
+	width:  auto;
+}
+
+.left, .fL, .alignleft { float: left; }
+.right, .fR, .alignright { float: right; }
+.center, .aligncenter { display: block; margin: 0 auto; }
+
+.clr {
+	clear: both;
+	font-size: 0;
+	height: 0;
+}
+
+.login #main-wrapper {
+	min-width: 640px;
+	border-top: 3px solid #711471;
+	padding-top: 111px;
+}
+
+#drg-login {
+	width: 402px;
+	margin: 0 auto;
+	position: relative;
+}
+
+#drg-login * {
+	font-family: 'Trebuchet MS', Arial, sans-serif;
+	font-size: 15px;
+	font-weight: normal;
+	padding: 0;
+	margin: 0;
+	color: #575757;
+}
+#drg-login .placeholder {
+	color: #999999;
+}
+#drg-login input[type="checkbox"],
+#drg-login input[type="radio"] {
+	display: inline;
+	vertical-align: text-top;
+	margin: 2.5px 0 0;
+	padding: 0;
+}
+
+#drg-login a {
+	font-size: 15px;	
+	color: #711471;
+	text-decoration: none;
+}
+#drg-login a:hover {
+	text-decoration: underline;
+}
+
+#drg-login #logo {
+	width: 265px;
+	height: 60px;
+	margin: 0 auto;
+}
+
+#drg-login #logo a {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+#drg-login #form-box {
+	background: #f8f8f8;
+	border: 1px solid #e7e7e7;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	width: 402px;
+	padding: 9px;
+	position: relative;
+	z-index: 1;
+}
+
+#drg-login #form-box .form-wrapper {
+	border: 1px dashed #e7e7e7;
+	width: auto;
+}
+
+#drg-login #form-box .form-head {
+	width: auto;
+	height: 28px;
+	padding: 15px 25px 0;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+#drg-login #form-box .form-head h1 {
+	background: url('../images/icon-login.png') 0 50% no-repeat;
+	font-size: 22px;
+	font-weight: bold;
+	line-height: 28px;
+	padding: 0 0 0 21px;
+	display: block;
+	float: left;
+}
+
+#drg-login #form-box .form-head a {
+	line-height: 28px;
+	float: right;
+}
+
+#drg-login #form-box form {
+	width: 341px;
+	height: auto;
+	margin: 0 auto;
+}
+#drg-login #form-box .field-row {
+	padding: 0 0 31px;
+}
+#drg-login #form-box .field-row.interim {
+	width: 341px;
+	padding: 10px 0 21px;
+	margin: 0 auto;
+}
+
+#drg-login #form-box span.drg-field {
+	background: #ffffff;
+	border: 1px solid #e2e2e2;
+	width: 339px;
+	height: 40px;
+	margin: 0 auto;
+	display: block;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+}
+#drg-login #form-box span.drg-field .drg-field-input {
+	background: #ffffff;
+	border: none;
+	width: 293px !important;
+	height: 40px;
+	padding: 0 15px;
+	display: block;
+	float: right;
+}
+.ie8 #drg-login #form-box span.drg-field .drg-field-input  {
+	border: 0.1px solid transparent;
+	line-height: 40px;
+}
+.ie9 #drg-login .placeholder.password,
+.ie8 #drg-login .placeholder.password {
+	width: 263px !important;
+	box-sizing: content-box;
+}
+.ie #drg-login .placeholder.password {
+	font-size: 15px;
+}
+
+#drg-login #form-box span.drg-field label {
+	background-color: #711471;
+	width: 46px;
+	height: 40px;
+	display: block;
+	float: left;
+}
+#drg-login #form-box span.drg-field label.iuser {
+	background: url('../images/icon-username.png') 50% 50% no-repeat #711471;
+}
+#drg-login #form-box span.drg-field label.ipass {
+	background: url('../images/icon-password.png') 50% 50% no-repeat #711471;
+}
+#drg-login #form-box span.drg-field label.iemail{
+	background: url('../images/icon-email.png') 50% 50% no-repeat #711471;
+}
+
+#drg-login #form-shadow {
+	background: url('../images/drg-form-shadow.png') 0 0 no-repeat;
+	width: 407px;
+	height: 88px;
+	position: absolute;
+	bottom: -36px;
+	z-index: 0;
+}
+
+#reg_passmail, #drg-login .description.indicator-hint {
+	padding: 12px 0;
+	font-size: 12px;
+	text-align: center;
+}
+#drg-login #form-box .field-row label#rememberme{
+	vertical-align: middle;
+	line-height: 1em;
+	margin: 6px 0 0;
+	float: left;
+}
+#drg-login #form-box .field-row.no-pbot {
+	padding-bottom: 0;
+}
+#drg-login #form-box .field-row.pbot-half {
+	padding-bottom: 15px;
+}
+
+#drg-login .drg-submit {
+	background: #711471;
+	border: 1px solid #6c126c;
+	font-size: 18px;
+	font-weight: normal;
+	color: #ffffff;
+	line-height: 34px;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
+	width: auto;
+	height: 34px;
+	padding: 0 40px;
+	margin: 0 auto;
+	display: block;
+	box-sizing: border-box;
+	float: right;
+	cursor: pointer;
+}
+#resetpassform #wp-submit {
+	float: none;
+	margin: 0 auto;
+}
+#msg-box {
+	width: 293px;
+	min-height: 70px;
+	margin: 0 auto;
+	overflow: hidden;
+	padding: 5px 0;
+}
+#msg-box p {
+	background: #a76aa7;
+	border: 1px solid #711471;
+	text-align: center;
+	height: 50px;
+	margin: 10px 0;
+	width: 100%;
+	display: table;
+	table-layout: fixed;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+#msg-box p span {
+	font-size: 13px;
+	color: #711471;
+	padding: 6px;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#msg-box p.error {
+	border: 1px solid #e91c3f;
+	background: #e91c3f;
+}
+#msg-box p.error span,
+#msg-box p.error span strong {
+	font-style: 13px;
+	color: #ffffff;
+}
+
+.login #pass-strength-result {
+	float: none;
+	position: static;
+	margin: 0 auto;
+}
+
+@media screen and ( max-device-width: 480px ){
+  body {
+    -webkit-text-size-adjust: none;
+  }
+}

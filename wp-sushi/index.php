@@ -1,0 +1,1 @@
+<?php /* Kai wa goruden desu. */ ?>

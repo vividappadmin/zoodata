@@ -1,0 +1,22 @@
+/*******************************************
+* SUSHI DIGITAL WORDPRESS STARTER TEMPLATE *
+*******************************************/
+
+INTRUCTIONS:
+
+1. Copy the complete HTML/CSS files on this folder here.
+
+2. Fill up the Theme information in style.css
+
+3. Distribute the basic parts ( header, index, page, footer )
+
+4. Create a screenshot for the theme.
+
+5. Activate the theme.
+
+
+NOTE!
+
+- Make sure wp_head(); is placed before </head>
+
+- Make sure wp_footer(); is placed after <!-- main-wrapper --> and before the global.js which is before </body>

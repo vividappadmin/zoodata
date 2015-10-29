@@ -1,0 +1,1 @@
+[21-Sep-2014 19:00:35] PHP Warning:  gzinflate() [<a href='function.gzinflate'>function.gzinflate</a>]: data error in /home/wc219272/public_html/zoodata.com.au/wp-content/plugins/w3-total-cache/lib/W3/Minify.php on line 1144

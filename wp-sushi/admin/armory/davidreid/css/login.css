@@ -1,0 +1,324 @@
+/*****************************
+* LOGIN STYLESHEET           *
+*****************************/
+
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic);
+
+* {
+	margin: 0;
+	padding: 0;
+	outline: none;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+html, body { min-width: 640px; min-height: 100%;  }
+
+body.login {	
+	background: #ffffff;
+	height: auto;	
+	-webkit-text-size-adjust: 100%;
+	-webkit-font-smoothing: antialiased;
+}
+
+.left, .fL, .alignleft { float: left; }
+.right, .fR, .alignright { float: right; }
+.center, .aligncenter { display: block; margin: 0 auto; }
+
+.clr {
+	clear: both;
+	font-size: 0;
+	height: 0;
+}
+
+.login #main-wrapper {
+	border-top: 3px solid #711471;
+	min-width: 640px;
+	padding-top: 65px;
+}
+
+#sushi-login {
+	width: 401px;
+	margin: 0 auto 0;
+	position: relative;	
+}
+#sushi-login * {	
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+}
+#sushi-login input[type="text"],
+#sushi-login input[type="password"] {
+	display: block;
+	outline: 0 none !important;
+}
+#sushi-login input[type="text"]:focus,
+#sushi-login input[type="password"]:focus {	
+	outline: 0 none;
+}
+#sushi-login label {
+	color: #575757;
+	vertical-align: middle;
+	line-height: normal;
+}
+#sushi-login input[type="checkbox"],
+#sushi-login input[type="radio"] {	
+	vertical-align: text-top;
+	margin: 2px 0 0;
+}
+#sushi-login input[type="checkbox"]:checked:before,
+#sushi-login input[type="radio"]:checked:before {
+	color: #711471;	
+}
+#sushi-login .form-head {
+	width: auto;
+	height: 153px;
+	position: relative;
+	z-index: 2;
+}
+#speech-box {
+	width: 100%;
+	min-height: 30px;
+	position: absolute;
+	right: 1px;
+	bottom: 22px;
+}
+#speech-box p.balloon {
+	font-family: 'Roboto', sans-serif;
+	background: #f6e3f6;
+	color: #333333;
+	line-height: normal;
+	width: 100%;
+	min-height: 30px;
+	border-left: 5px solid #711471;
+	display: table;
+	table-layout: fixed;
+	float: right;
+	/* -moz-box-shadow: 1px 3px #c5c5c5;
+	-webkit-box-shadow: 1px 3px #c5c5c5;
+	box-shadow: 1px 3px #c5c5c5;	 */
+}
+#speech-box p.balloon  * {
+	font-size: 14px;
+}
+#speech-box p.balloon.single * {
+	font-size: 18px;
+}
+#speech-box p.balloon.error {
+	background: #f6e8e8;
+	border-left: 5px solid #cc0000;
+	color: #cc0000;
+}
+#speech-box p.balloon a {
+	color: #711471;
+	text-decoration: none;
+}
+#speech-box p.balloon a:hover {
+	text-decoration: underline;
+}
+#speech-box p.balloon span {
+	width: 100%;
+	padding: 14px;
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+}
+/* #speech-box p.balloon:before {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+	left: -20px;
+	bottom: 24px;
+	border: 10px solid;
+	border-color: transparent #c5c5c5 transparent transparent;
+}
+#speech-box p.balloon:after {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+	left: -20px;
+	bottom: 25px;
+	border: 10px solid;
+	border-color: transparent #ffffff transparent transparent;
+}
+#speech-box p.balloon.error:after {
+	border-color: transparent #e91c3f transparent transparent;
+} */
+
+#sushi-login .form-box {
+	background: #f8f8f8;
+	border: 1px solid #e7e7e7;
+	width: 401px;
+	height: 404px;
+	position: relative;
+	z-index: 3;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	box-shadow: 0 3px #c7c7c7;
+}
+#sushi-login .form-box .form-box-head {
+	width: 400px;
+	height: 115px;
+	position: relative;
+	overflow: hidden;
+}
+#sushi-login .form-box .form-box-head #logo {
+	width: 300px;
+	height: 68px;
+	display: block;
+	margin: 0 auto;
+	padding: 34px 0 0;
+	box-sizing: content-box;
+}
+#sushi-login .form-box .form-box-head #logo a {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+#sushi-login .form-box form {
+	background: none;
+	border: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	width: 400px;
+	max-height: 276px;
+	display: block;
+	position: relative;
+}
+#sushi-login .form-box .form-box-footer {
+	width: 400px;
+	min-height: 70px;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	text-align: center;
+}
+#sushi-login .form-box .form-box-footer span {
+	color: #ffffff;	
+}
+#sushi-login .form-box .form-box-footer a {
+	color: #711471;
+	text-decoration: underline;	
+	text-align: center;
+}
+#sushi-login .form-box .form-box-footer a:hover {
+	color: #2f032f;
+}
+#sushi-doll {
+	min-width: 126px;
+	min-height: 153px;
+	position: absolute;
+	top: 0;
+	left: 3px;
+	z-index: 1;
+}
+#sushi-doll {
+	background: url('../images/sushi-doll.png') 0 0 no-repeat;
+	width: 126px;
+	height: 361px;
+	position: absolute;
+	top: 0;
+	left: 3px;
+	z-index: 1;
+}
+#sushi-doll-hands {
+	background: url('../images/sushi-doll-hands.png') 0 0 no-repeat;
+	width: 76px;
+	height: 24px;
+	position: absolute;
+	top: 144px;
+	left: 32px;
+	z-index: 4;
+}
+#sushi-login .field-row {
+	width: 340px;
+	padding: 0 0 22px;
+	margin: 0 auto;
+}
+#sushi-login .field-row.before {
+	padding-bottom: 16px;
+}
+#sushi-login .sushi-field {
+	background: url('../images/sushi-bg-field.png') 0 0 no-repeat;
+	font-size: 16px;
+	border: none;
+	width: 340px;
+	height: 40px;
+	padding: 0 8px;
+	display: block;
+	box-sizing: border-box;
+}
+.ie8 #sushi-login .sushi-field {
+	line-height: 40px;	
+	height: 40px;
+	border: 0.1px solid transparent;
+}
+.ie9 #sushi-login .placeholder.password {
+	width: 324px !important;
+	box-sizing: content-box;
+}
+.ie #sushi-login .placeholder.password {
+	font-size: 16px;
+}
+#sushi-login span.sushi-button {
+	background: url('../images/sushi-bg-button.png') 0 0 no-repeat;
+	border: none;
+	width: 251px;
+	height: 41px;
+	margin: 0 auto;
+	display: block;
+	box-sizing: border-box;
+}
+#sushi-login span.sushi-button input.sushi-submit {
+	background: none;
+	border: none;
+	font-family: "Century Gothic", Tahoma, Arial, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	width: 251px;
+	height: 34px;
+	display: block;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+#sushi-login #pass-strength-result {
+	font-size: 11px;
+	width: 200px;
+	padding: 2px 5px;
+	margin: 0 auto;
+	float: none;
+}
+
+#trail {
+	padding: 6px 1px;
+	display: none;
+}
+#trail p {
+	font-family: Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #424242;
+}
+#trail p span,
+#trail p strong {
+	font-size: 12px;
+	font-weight:  normal;
+}
+#trail p.mode span {
+	color: #711471;
+}
+#trail p.version span {
+	color: #6E9F3C;
+}
+
+@media screen and ( max-device-width: 480px ){
+  body {
+    -webkit-text-size-adjust: none;
+  }
+}

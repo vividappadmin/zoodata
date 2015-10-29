@@ -1,0 +1,326 @@
+@charset "utf-8";
+
+/*****************************
+* KAI CSS STARTER v3.2       *
+*****************************/
+
+@import url( 'http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' );
+
+/*****************************
+* BASE DEFAULTS              *
+*****************************/
+
+* { margin: 0; padding: 0; outline: none; }
+html, body { min-height: 100%; }
+
+body {
+	background: #80C655;
+}
+
+a, a:hover { text-decoration: none; }
+
+h1, h2, h3, h4, h5, h6 { line-height: 1em; }
+h1 { font-size: 24px; }
+h2 { font-size: 18px; }
+h3 { font-size: 14px; }
+h4 { font-size: 12px; }
+h5 { font-size: 10px; }
+h6 { font-size: 8px; }
+
+fieldset, img { border: none; }
+ul li { list-style-type: none; }
+textarea { resize: none; }
+table { border-collapse: collapse; }
+
+pre {
+	font-family: "Courier New", "Lucida Console";
+	overflow: auto;
+}
+
+body, fieldset, textarea, input, label, select, ul, ol, legend {
+	font-family: "Droid Serif", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+	font-size: 12px;
+	color: #464646;
+	display: block;
+}
+
+/*****************************
+* GLOBAL LAYOUTS & TOOLS     *
+*****************************/
+
+.left { float: left; }
+.right { float: right; }
+
+.clr {
+	clear: both;
+	font-size: 0;
+	height: 0;
+}
+.clr-left { clear: left; }
+.clr-right { clear: right; }
+
+.no-bg { background: none !important; }
+.no-b { border: 0 none !important; }
+
+.no-p { padding: 0 !important; }
+.no-pt { padding-top: 0 !important; }
+.no-pr { padding-right: 0 !important; }
+.no-pb { padding-bottom: 0 !important; }
+.no-pl { padding-left: 0 !important; }
+
+.no-m { margin: 0 !important; }
+.no-mt { margin-top: 0 !important; }
+.no-mr { margin-right: 0 !important; }
+.no-mb { margin-bottom: 0 !important; }
+.no-ml { margin-left: 0 !important; }
+
+.ie7 .clr, .ie6 .clr { display: inline; }
+
+/********************************
+* PLEASE DON'T ADD ON/MODIFY    *
+* THE CSS ABOVE EXCEPT FOR BODY *
+* TAG AND IMPORTING EXTERNAL    *
+* FILES ABOVE BASE RESETS.      *
+********************************/
+
+#main-wrapper {
+	min-width: 1136px;
+	padding: 20px 0;
+}
+.main-container {
+	background: #ffffff;
+	border-radius: 2px;
+	width: 1136px;
+	margin: 0 auto;
+	position: relative;
+}
+
+.img-holder { overflow: hidden; }
+.img-holder img, a img { display: block; }
+
+
+/*****************************
+* TEXT STYLES                *
+*****************************/
+
+a { color: #9CC96A; font-weight: normal; }
+a:hover { text-decoration: underline; }
+
+p {
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	padding: 0 0 12px;
+	color: #464646;
+	line-height: 1.7em;
+}
+p span {
+	color: #DA1543;
+}
+
+pre {
+	padding: 0 10px;
+	background: #fff1f1;
+	white-space: pre-wrap;
+}
+
+h1 {
+	min-width: 745px;	
+	font-size: 40px;
+	font-weight: normal;
+	color: #424242;
+	padding: 20px;
+	text-align: center;
+}
+h1 span {
+	color: #DA1543;
+}
+
+h2 {
+	font-size: 24px;
+	font-weight: normal;
+	color: #FF3D43;
+	margin: 0 0 22px;
+}
+
+h3 {
+	font-size: 16px;
+	font-family: Arial, sans-serif;
+	margin-bottom: 14px;
+	color: #000000;
+}
+
+ol {
+	list-style-position: inside;
+}
+
+ol li {
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	list-style-type: square;
+	line-height: 1.7em;
+	padding: 0 0 10px;
+}
+
+/*****************************
+* BUTTONS & FORM STYLES     *
+*****************************/
+
+.button, [class~="button"],
+.button input, [class~="button"] input {
+	border: none;
+	cursor: pointer;
+	display: block;
+}
+
+.button:hover, .button:active {
+}
+
+
+/*****************************
+* HEADER                     *
+*****************************/
+
+header {
+	width: auto;
+	position: relative;
+	padding: 5px 0;
+}
+
+#logo {
+	width: 350px;
+	height: 47px;
+	padding: 20px;
+	float: left;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+}
+#logo a {		
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+
+/*****************************
+* MENUS & NAVIGATIONS        *
+*****************************/
+
+#main-nav {
+	border-top: 1px solid #e5e5e5;
+	border-right: 5px solid #e5e5e5; 
+	background: #f9f9f9;
+	width: 300px;
+	float: left;
+	position: relative;
+}
+
+#main-nav ul {
+	width: 300px;
+	display: block;
+}
+
+#main-nav ul li {
+	background: #ededed;
+	border-right: 5px solid #FF3D43; 
+	float: none;
+}
+#main-nav ul li.main {
+	background: #bcbcbc;
+}
+#main-nav ul li:hover,
+#main-nav ul li.current_page_item {	
+	background: #f8f8f8;
+	border-right: 5px solid #92D050;
+}
+
+#main-nav ul li.main a {	
+	color: #ffffff;
+}
+#main-nav ul li a {
+	padding: 15px 20px;
+	font-family: "Arial", san-serif;
+	font-size: 15px;
+	color: #646464;
+	display: block;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+#main-nav ul li a:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+/*****************************
+* BANNER                     *
+*****************************/
+
+#banner {
+}
+
+
+/*****************************
+* CONTENT AREA               *
+*****************************/
+
+#content-area {
+	min-height: 177px;
+	padding: 0 0 10px;
+}
+
+#content-area .sidebar {
+	background-image: url(data:image/gif;base64,R0lGODlhLAEZAIAAAP///+Tt2iH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjEgNjQuMTQwOTQ5LCAyMDEwLzEyLzA3LTEwOjU3OjAxICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1LjEgV2luZG93cyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo2RTYzMTM5RUUzMzAxMUUxQTI4Nzk3RUNCNUE3M0Q1RSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo2RTYzMTM5RkUzMzAxMUUxQTI4Nzk3RUNCNUE3M0Q1RSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjZFNjMxMzlDRTMzMDExRTFBMjg3OTdFQ0I1QTczRDVFIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjZFNjMxMzlERTMzMDExRTFBMjg3OTdFQ0I1QTczRDVFIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEAAAAAAAsAAAAACwBGQAAAoOMj6nL7Q+jnLTai7PevPsPhuJIluaJpurKtu4Lx/JMk0CN5/r+3ZPPCwqHRGDESEwqlyzkw8mMSqcaKPWKzWq33K73Cw6Lx+RyyWpOqzvoRXsNj0veCbr8jj/Y9fm+X7H3JzhIWGh4iJiouMjY6CgY+CiJExk5eRlTibk5pMn5qWNVAAA7);
+	background-color: #e4edda;
+	background-repeat: repeat-y;
+	width: 300px;
+	min-height: 590px;
+}
+
+#content-area .main-content {
+	width: 835px;
+	padding: 20px 30px;
+}
+
+#content-area .main-content  .content {
+	font-size: 15px;
+}
+
+
+/*****************************
+* BOTTOM AREA & FOOTER       *
+*****************************/
+
+#bottom-area {
+}
+
+footer {
+	background: #242424;
+	width: auto;	
+	font-size: 12px;
+	color: #555555;
+	text-align: center;
+	line-height: 20px;
+	padding: 15px 20px;
+	border-radius: 0 0 2px 2px;
+}
+footer  p {
+	font-family: 'Arial', sans-serif;
+	color: #ffffff;
+	padding: 0;
+}
+
+footer  p.copyright a {
+	color: #FF3D43;
+}
+
+/*****************************
+* JQUERY SUSHI STYLES        *
+*****************************/
+
+
+
+
+/*
+* END OF FILE
+* global.css
+*/

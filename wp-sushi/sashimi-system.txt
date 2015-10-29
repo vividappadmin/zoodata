@@ -1,0 +1,52 @@
+[SUSHI WORDPRESS SYSTEM]
+
+TO-DO's:
+
+Admin Theme
+Sashimi Theme Sushi Talk UI
+Make Loading of Packages Clean
+One Page Theme Options
+
+[Overview]
+
+I. System Overview
+
+Model: Sashimi
+Version: 3.1.0
+Core: [ wordpress version ]
+Package Mode: [ Standard | One Page ]
+Status: [ Live | Demo | Local ]
+
+II. Admin Themes
+
+Current Theme: Sashimi
+Available Themes: 
+1. [ thumb ] [ title ] - Active
+2. [ thumb ] [ title ] - Use
+
+III. Site Information
+
+URL: [ url ]
+
+[Packages]
+
+(Table List Type)
+
+1. Standard 
+2. One Page
+
+[Admin Themes]
+
+(Themes-like UX)
+
+[Settings]
+
+(Tick boxes)
+
+1. Wordpress 
+
+[X] Hide Admin Bar at Front-end
+[X] Disable Update Notifications
+[X] Disable Theme Editor Menu
+[X] Disable Media Thumbnails Generation
+
