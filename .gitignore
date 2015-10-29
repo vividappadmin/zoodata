@@ -1,0 +1,14 @@
+#This is gitignore file
+.htaccess
+wp-config.php
+wp-content/themes/sushi/cache/*
+cache/*
+logs/*
+/wp-sushi/assets/scripts/timthumb/cache/*timthumb*
+/wp-content/themes/sushi/cache/*
+/wp-content/themes/sushi/*timthumb*
+/wp-content/uploads/*
+wp-content/themes/sushi/library/timthumb/cache/*
+wp-content/advanced-cache.php
+wp-content/w3tc-config/*
+wp-content/cache/*
