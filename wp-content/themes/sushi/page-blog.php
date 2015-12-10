@@ -27,7 +27,7 @@ $data = get_page( $pageid );
 								<?php 
 									$paged = get_query_var('paged') ? get_query_var('paged') : 1;
 									$args = array(
-												'cat' => 10,
+												'category_name'=> 'Blog', 
 												'post_type' => 'post',
 												'paged'	=> $paged,
 												'post_status' => 'publish',

@@ -11,16 +11,23 @@
 	<div id="recent-post">
 		<h3>Recent posts</h3>
 		<?php 
-			$recent_post = new WP_Query("post_type=post&posts_per_page=4&cat=10&orderby=date&order=DESC");
-			if($recent_post->have_posts()) :
-				while($recent_post->have_posts()) : $recent_post->the_post();
-		?>
+			$args = array(
+					'posts_per_page' 	=> 4,
+					'category_name' => 'Blog',
+					'post_type' => 'post',
+					'post_status' => 'publish',
+					'orderby'=> 'date', 
+					'order' => 'DESC');
+					
+			$featured_posts = wp_get_recent_posts($args);
+
+			foreach ($featured_posts as $featured_posts) { ?>
 				<div class="list">
-					<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-					<span class="dates"><?php the_time( 'jS F Y' ); ?></span>
-				</div>
-		<?php endwhile;
-			endif;
+					<h4><?php echo '<a href="' . get_permalink($featured_posts['ID']) . '">' .   $featured_posts['post_title'].'</a>'; ?></h4>
+					<span class="dates"><?php the_time('F j, Y'); ?></span>
+				</div>	
+		<?php
+			}
 			wp_reset_postdata();
 		?>
 	</div>
