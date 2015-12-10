@@ -24,6 +24,10 @@
 			wp_reset_postdata();
 		?>
 	</div>
+	<div id="newsletter">
+		<?php add_filter( 'mc4wp_form_css_classes', function( $classes ) {  $classes[] = 'form-inline'; return $classes; }); ?>
+        <?php echo do_shortcode('[mailchimpsf_form]'); ?>
+	</div>
 	<div id="categories">
 		<h3>Categories</h3>
 		<?php 			

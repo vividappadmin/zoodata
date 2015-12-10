@@ -60,6 +60,32 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'roboto_slabregular';
+    src: url('fonts/robotoslab-regular/robotoslab-regular-webfont.eot');
+    src: url('fonts/robotoslab-regular/robotoslab-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/robotoslab-regular/robotoslab-regular-webfont.woff2') format('woff2'),
+         url('fonts/robotoslab-regular/robotoslab-regular-webfont.woff') format('woff'),
+         url('fonts/robotoslab-regular/robotoslab-regular-webfont.ttf') format('truetype'),
+         url('fonts/robotoslab-regular/robotoslab-regular-webfont.svg#roboto_slabregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+	font-family:'HelveticaLTStd-Light';
+	src: url('fonts/HelveticaLTStd/HelveticaLTStd-Light_gdi.eot');
+	src: url('fonts/HelveticaLTStd/HelveticaLTStd-Light_gdi.eot?#iefix') format('embedded-opentype'),
+		url('fonts/HelveticaLTStd/HelveticaLTStd-Light_gdi.woff') format('woff'),
+		url('fonts/HelveticaLTStd/HelveticaLTStd-Light_gdi.ttf') format('truetype'),
+		url('fonts/HelveticaLTStd/HelveticaLTStd-Light_gdi.svg#HelveticaLTStd-Light') format('svg');
+	font-weight: 300;
+	font-style: normal;
+	font-stretch: normal;
+	unicode-range: U+0020-25CA;
+}
+
 /*****************************
 * BASE DEFAULTS              *
 *****************************/
@@ -2425,7 +2451,7 @@ h2 {
 	line-height: 1.1;
 }
 #blog-sidebarNav {
-    width: 310px;
+    width: 316px;
 	padding: 49px 0 0; /* 55px 0 0; */
 }
 
@@ -2506,6 +2532,117 @@ h2 {
     background: #d5d6d2;
 	color: #565a5c;
 }
+
+/*BLOG - NEWSLETTER*/
+#newsletter::-webkit-input-placeholder {
+	color: rgb(148, 149, 151);
+	font-family: "HelveticaLTStd-Light";
+	font-style: italic;
+}
+
+#newsletter*::-moz-placeholder {
+	color: #949597;
+	font-family: "HelveticaLTStd-Light";
+	font-style: italic;
+}
+
+#newsletter::-moz-placeholder {
+	color: rgb(148, 149, 151);
+	font-family: "HelveticaLTStd-Light";
+	font-style: italic;
+	opacity: 1; /* Since FF19 lowers the opacity of the placeholder by default */
+}
+
+#newsletter:-ms-input-placeholder {
+	color: rgb(148, 149, 151);
+	font-family: "HelveticaLTStd-Light";
+	font-style: italic;
+}
+
+#newsletter .mc_custom_border_hdr {
+	color: #00c7b2;
+	font: 24px/25px "roboto_slabregular";
+	margin-bottom: 19px;
+}
+
+#newsletter {
+	padding-bottom: 55px;
+	border-bottom: 1px solid #d1d1d1;
+}
+
+	#newsletter #mc_subheader {
+		color: #949597;
+		font: 14px/20px "HelveticaLTStd-Light";
+		margin-bottom: 19px;
+	}
+
+		#mc_signup_form {
+			position: relative;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+
+		.mc_form_inside {
+			position: relative;
+		}
+
+		.mc_form_inside .mc_merge_var,
+		.mc_form_inside .mc_signup_submit {
+			float: left;
+		}
+
+		.mc_form_inside .mc_merge_var {
+			line-height: 1;
+			margin-right: 5px;
+			width: 67.5%;
+		}
+
+			#mc_signup_form .mc_input {
+				border: 1px solid #c6c6c6;
+				font: 14px/20px "HelveticaLTStd-Light";
+				padding: 11px;
+				height: 43px;
+				width: 100%;
+			}
+
+		.mc_form_inside .mc_signup_submit {
+			line-height: 1;
+			width: 30%;
+		}
+
+			#mc_signup_submit {
+				background: #eb8e17;
+				border: medium none;
+				color: #fff;
+				font: 700 14px/20px "HelveticaLTStd-Light";
+				height: 43px;
+				padding: 11px 24px;		
+				cursor: pointer;		
+			}
+
+		.mc_sushi_err {
+			color: #5D5D5D;
+			display: block;
+			font: 12px/15px "HelveticaLTStd-Light";
+			padding: 10px 0 0 0;
+		}
+
+		.mc_sushi_err{
+	        position: absolute;
+	        top: 0;
+	        left: 0;
+	        padding: 11px;
+	        color: #ffffff;
+	        font-size: 14px;
+	        width: 213px;
+	        height: 43px;
+	        line-height: 20px;
+	        background: #dd4444;
+	        border: 1px solid #FB6565;
+	        zoom: 1;
+	        behavior: url(pie.htc);
+	    }
 
 .single .author-cont img {
 	float: left;

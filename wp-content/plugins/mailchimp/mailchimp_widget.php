@@ -278,13 +278,13 @@ function mailchimp_form_field($var, $num_fields) {
 		// End Sushi
 		
 		$html .= '
-<div class="mc_merge_var">
+<div class="mc_merge_var form-group">
 		'.$label;
 	
 		switch ($var['field_type']) {
 			case 'date': 
 				$html .= '
-	<input type="text" size="18" value="'.esc_attr($var['default']).'" name="'.esc_attr($opt).'" id="'.esc_attr($opt).'" class="date-pick mc_input"/>';
+	<input type="text" size="18" value="'.esc_attr($var['default']).'" name="'.esc_attr($opt).'" id="'.esc_attr($opt).'" class="date-pick mc_input form-control"/>';
 				break;
 			case 'radio':
 				if (is_array($var['choices'])) {
@@ -315,7 +315,7 @@ function mailchimp_form_field($var, $num_fields) {
 				break;
 			case 'birthday':
 				$html .= '
-	<input type="text" size="18" value="'.esc_attr($var['default']).'" name="'.esc_attr($opt).'" id="'.esc_attr($opt).'" class="birthdate-pick mc_input"/>';
+	<input type="text" size="18" value="'.esc_attr($var['default']).'" name="'.esc_attr($opt).'" id="'.esc_attr($opt).'" class="birthdate-pick mc_input form-control"/>';
 				break;
 			case 'birthday-old':
 				$days = range(1, 31);
@@ -344,15 +344,15 @@ function mailchimp_form_field($var, $num_fields) {
 			$html .= '
 	<br />
 	<label for="'.esc_attr($opt.'-addr1').'" class="mc_address_label">'.__('Street Address', 'mailchimp_i18n').'</label> <br />
-	<input type="text" size="18" value="" name="'.esc_attr($opt.'[addr1]').'" id="'.esc_attr($opt.'-addr1').'" class="mc_input" /> <br />
+	<input type="text" size="18" value="" name="'.esc_attr($opt.'[addr1]').'" id="'.esc_attr($opt.'-addr1').'" class="mc_input form-control" /> <br />
 	<label for="'.esc_attr($opt.'-addr2').'" class="mc_address_label">'.__('Address Line 2', 'mailchimp_i18n').'</label> <br />
-	<input type="text" size="18" value="" name="'.esc_attr($opt.'[addr2]').'" id="'.esc_attr($opt.'-addr2').'" class="mc_input" /> <br />
+	<input type="text" size="18" value="" name="'.esc_attr($opt.'[addr2]').'" id="'.esc_attr($opt.'-addr2').'" class="mc_input form-control" /> <br />
 	<label for="'.esc_attr($opt.'-city').'" class="mc_address_label">'.__('City', 'mailchimp_i18n').'</label>	<br />
-	<input type="text" size="18" value="" name="'.esc_attr($opt.'[city]').'" id="'.esc_attr($opt.'-city').'" class="mc_input" /> <br />
+	<input type="text" size="18" value="" name="'.esc_attr($opt.'[city]').'" id="'.esc_attr($opt.'-city').'" class="mc_input form-control" /> <br />
 	<label for="'.esc_attr($opt.'-state').'" class="mc_address_label">'.__('State', 'mailchimp_i18n').'</label> <br />
-	<input type="text" size="18" value="" name="'.esc_attr($opt.'[state]').'" id="'.esc_attr($opt.'-state').'" class="mc_input" /> <br />
+	<input type="text" size="18" value="" name="'.esc_attr($opt.'[state]').'" id="'.esc_attr($opt.'-state').'" class="mc_input form-control" /> <br />
 	<label for="'.esc_attr($opt.'-zip').'" class="mc_address_label">'.__('Zip / Postal', 'mailchimp_i18n').'</label> <br />
-	<input type="text" size="18" value="" maxlength="5" name="'.esc_attr($opt.'[zip]').'" id="'.esc_attr($opt.'-zip').'" class="mc_input" /> <br />
+	<input type="text" size="18" value="" maxlength="5" name="'.esc_attr($opt.'[zip]').'" id="'.esc_attr($opt.'-zip').'" class="mc_input form-control" /> <br />
 	<label for="'.esc_attr($opt.'-country').'" class="mc_address_label">'.__('Country', 'mailchimp_i18n').'</label> <br />
 	<select name="'.esc_attr($opt.'[country]').'" id="'.esc_attr($opt.'-country').'">';
 			foreach ($countries as $country_code => $country_name) {
@@ -364,13 +364,13 @@ function mailchimp_form_field($var, $num_fields) {
 				break;
 			case 'zip':
 				$html .= '
-	<input type="text" size="18" maxlength="5" value="" name="'.esc_attr($opt).'" id="'.esc_attr($opt).'" class="mc_input" />';
+	<input type="text" size="18" maxlength="5" value="" name="'.esc_attr($opt).'" id="'.esc_attr($opt).'" class="mc_input form-control" />';
 				break;
 			case 'phone':
 				$html .= '<br />
-	&#40; <input type="text" size="3" maxlength="3" value="" name="'.esc_attr($opt.'[area]').'" id="'.esc_attr($opt.'-area').'" class="mc_input mc_phone" /> &#41; &ndash;
-	<input type="text" size="3" maxlength="3" value="" name="'.esc_attr($opt.'[detail1]').'" id="'.esc_attr($opt.'-detail1').'" class="mc_input mc_phone" /> &ndash;
-	<input type="text" size="4" maxlength="4" value="" name="'.esc_attr($opt.'[detail2]').'" id="'.esc_attr($opt.'-detail2').'" class="mc_input mc_phone" />
+	&#40; <input type="text" size="3" maxlength="3" value="" name="'.esc_attr($opt.'[area]').'" id="'.esc_attr($opt.'-area').'" class="mc_input form-control mc_phone" /> &#41; &ndash;
+	<input type="text" size="3" maxlength="3" value="" name="'.esc_attr($opt.'[detail1]').'" id="'.esc_attr($opt.'-detail1').'" class="mc_input form-control mc_phone" /> &ndash;
+	<input type="text" size="4" maxlength="4" value="" name="'.esc_attr($opt.'[detail2]').'" id="'.esc_attr($opt.'-detail2').'" class="mc_input form-control mc_phone" />
 			';
 				break;
 			case 'email':
@@ -380,7 +380,7 @@ function mailchimp_form_field($var, $num_fields) {
 			case 'number':
 			default:
 				$html .= '
-	<input type="text" size="18" value="'.esc_html($var['default']).'" name="'.esc_attr($opt).'" id="'.esc_attr($opt).'" class="mc_input" ' . $sushi_ph . ' />';
+	<input type="text" size="18" value="'.esc_html($var['default']).'" name="'.esc_attr($opt).'" id="'.esc_attr($opt).'" class="mc_input form-control" ' . $sushi_ph . ' />';
 				break;
 		}
 		if (!empty($var['helptext'])) {

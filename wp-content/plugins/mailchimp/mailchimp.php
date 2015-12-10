@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: MailChimp
+Plugin Name: MailChimp (Modded v2)
 Plugin URI: http://www.mailchimp.com/plugins/mailchimp-wordpress-plugin/
-Description: The MailChimp plugin allows you to quickly and easily add a signup form for your MailChimp list.
+Description: <strong>This is a modified version of Mailchimp 1.2.14 for Sushi Wordpress</strong>. The MailChimp plugin allows you to quickly and easily add a signup form for your MailChimp list.
 Version: 1.2.14
 Author: MailChimp and Crowd Favorite
 Author URI: http://mailchimp.com/api/
@@ -1243,9 +1243,13 @@ function mailchimpSF_signup_submit() {
 			$opt_val = implode($opt_val);
 		}
 
-		if ($var['req'] == 'Y' && trim($opt_val) == '') {
+		if ( ($var['req'] == 'Y' && trim($opt_val) == '') && $var['tag'] != 'EMAIL') {
 			$success = false;
 			$errs[] = sprintf(__("%sYou must fill in %s.", 'mailchimp_i18n'), $pretag, esc_html($var['name']));
+		}
+		if ( ($var['req'] == 'Y' && trim($opt_val) == '') && $var['tag'] == 'EMAIL' ) {
+			$success = false;
+			$errs[] = sprintf(__("%sYou must fill in email address.", 'mailchimp_i18n'), $pretag, esc_html(''));
 		}
 		else {
 			if ($var['tag'] != 'EMAIL') {

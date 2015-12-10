@@ -549,6 +549,28 @@ function ajax_prev_slide( $ ){
 	});
 }
 
+$( document ).on( 'mouseover', "span.wpcf7-not-valid-tip", function(e) {
+    $(this).delay( 1000 ).fadeOut( 'fast', function() {
+        if ( $(this).prev().length ) {
+            $(this).prev().focus(); 
+        }
+    });
+});
+
+$( document ).on( 'mouseover', "span.wpcf7-not-valid-tip", function(e) {
+	$(this).fadeOut( 'fast', function() {
+		if ( $(this).prev().length ) {
+			$(this).prev().focus(); 
+		}
+	});
+});
+
+$( document ).on( 'focus', ".wpcf7 input[type='text'], .wpcf7 textarea", function() {
+	if ( $(this).next().length ) {
+		$(this).next().fadeOut( 'fast' );
+	}
+});
+
 /*
 * END OF FILE
 * global.js

@@ -55,12 +55,12 @@
 						$( el ).val( $( el ).attr( 'placeholder' ) );
 				});			
 			});
-		}
+		} 
 		
 		var $msg = $( "#mc_message" );
 		if ( $msg.length )
 		{
-			var filtered = $msg.find( ".mc_error_msg" ).html().replace( /BR/g, 'br');
+			var filtered = ( $msg.find( ".mc_error_msg" ).length ) ? $msg.find( ".mc_error_msg" ).html().replace( /BR/g, 'br') : '';
 			var lines = filtered.replace( new RegExp( '<br>$' ), '' ).split('<br>');			
 			var $fields = $( "#mc_signup_form" ).find( ".mc_merge_var" );			
 			
@@ -73,7 +73,8 @@
 					for ( var j=0; j < lines.length; j++ )
 					{
 						var segs = lines[j].split(':');
-						
+
+						console.log(segs);
 						if ( segs.length <= 1 && $("#mc_sushi_using_pretag").val() == 'on' ) 
 						{
 							console.log( '[Sushi Modified Mailchimp : Distribute validation errors] - Unfiltered error, "' + filtered + '". No need to panic though, just satisfy the said error.' );
@@ -85,6 +86,8 @@
 						
 						if ( segs[1] === name )
 						{
+							console.log(segs[1]);
+
 							var err = $( '<span class="mc_sushi_err">' + segs[2] + '</span>' );
 							err.mouseover( function(e) { $(this).animate({ opacity: 0}, 800, function() { $(this).hide(); } );	});
 							
