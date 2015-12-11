@@ -2593,6 +2593,10 @@ h2 {
 			float: left;
 		}
 
+		.mc_form_inside #mc_message {
+			font: 14px/20px "HelveticaLTStd-Light";
+		}
+
 		.mc_form_inside .mc_merge_var {
 			line-height: 1;
 			margin-right: 5px;
