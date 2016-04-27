@@ -1,145 +1,79 @@
-/*
-*  Color Picker
-*
-*  @description: 
-*  @since: 3.5.8
-*  @created: 17/01/13
-*/
-
 (function($){
 	
-	_cp = acf.fields.color_picker;
-	
 	/*
-	*  acf/setup_fields
+	*  Color Picker
 	*
-	*  @description: 
-	*  @since: 3.5.8
-	*  @created: 17/01/13
+	*  jQuery functionality for this field type
+	*
+	*  @type	object
+	*  @date	20/07/13
+	*
+	*  @param	N/A
+	*  @return	N/A
 	*/
 	
-	$(document).live('acf/setup_fields', function(e, postbox){
+	var _cp = acf.fields.color_picker = {
 		
-		// validate
-		if( ! $.farbtastic )
-		{
-			return;
-		}
+		$el : null,
+		$input : null,
 		
-
-		$(postbox).find('input.acf_color_picker').each(function(){
+		set : function( o ){
 			
-			// vars
-			var input = $(this);
-
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find input
+			this.$input = this.$el.find('input[type="text"]');
+			
+			
+			// return this for chaining
+			return this;
+			
+		},
+		init : function(){
+			
+			// vars (reference)
+			var $input = this.$input;
+			
 			
 			// is clone field?
-			if( acf.helpers.is_clone_field(input) )
+			if( acf.helpers.is_clone_field($input) )
 			{
 				return;
 			}
 			
-
-			if( input.val() )
-			{
-				$.farbtastic( input ).setColor( input.val() ).hsl[2] > 0.5 ? color = '#000' : color = '#fff';
-				
-				input.css({ 
-					backgroundColor : input.val(),
-					color : color
-				});
-			}
+			
+			this.$input.wpColorPicker();
+			
+			
+			
+		}
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	$(document).on('acf/setup_fields', function(e, el){
+		
+		$(el).find('.acf-color_picker').each(function(){
+			
+			_cp.set({ $el : $(this) }).init();
 			
 		});
 		
 	});
-	
-	
-	/*
-	*  Input Focus
-	*
-	*  @description: 
-	*  @since: 3.5.8
-	*  @created: 17/01/13
-	*/
-	
-	$('input.acf_color_picker').live('focus', function(){
 		
-		var input = $(this);
-		
-		if( ! input.val() )
-		{
-			input.val( '#FFFFFF' );
-		}
-		
-		$('#acf_color_picker').css({
-			left: input.offset().left,
-			top: input.offset().top - $('#acf_color_picker').height(),
-			display: 'block'
-		});
-		
-		_cp.farbtastic.linkTo(this);
-		
-	});
-	
-	
-	/*
-	*  Input Blur
-	*
-	*  @description: 
-	*  @since: 3.5.8
-	*  @created: 17/01/13
-	*/
-	
-	$('input.acf_color_picker').live('blur', function(){
-		
-		var input = $(this);
-		
-		
-		// reset the css
-		if( ! input.val() )
-		{
-			input.css({ 
-				backgroundColor : '#fff',
-				color : '#000'
-			});
-			
-		}
-		
-		
-		$('#acf_color_picker').css({
-			display: 'none'
-		});
-						
-	});
-	
-	
-	/*
-	*  Document Ready
-	*
-	*  @description: 
-	*  @since: 3.5.8
-	*  @created: 17/01/13
-	*/
-	
-	$(document).ready(function(){
-		
-		
-		/*
-		*  Color Picker
-		*/
-
-		if( $.farbtastic )
-		{
-			if( !_cp.farbtastic )
-			{
-				$('body').append('<div id="acf_color_picker" />');
-		
-				_cp.farbtastic = $.farbtastic('#acf_color_picker');
-			}
-		}
-		
-	});
-	
 
 })(jQuery);

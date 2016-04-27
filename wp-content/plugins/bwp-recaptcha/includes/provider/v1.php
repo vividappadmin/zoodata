@@ -33,7 +33,7 @@ class BWP_Recaptcha_Provider_V1 extends BWP_Recaptcha_Provider
 			if (!empty($_GET['cerror'])) {
 				$captchaError     = $this->getErrorMessageFromCode($_GET['cerror']);
 				$captchaErrorCode = $_GET['cerror'];
-			} elseif (isset($errors) && is_wp_error($errors)) {
+			} elseif (isset($errors)) {
 				$captchaError = $errors->get_error_message('recaptcha-error');
 			}
 
@@ -41,9 +41,15 @@ class BWP_Recaptcha_Provider_V1 extends BWP_Recaptcha_Provider
 ?>
 		<style type="text/css">
 			/* this is to prevent the iframe from showing up in Chrome */
-			iframe[src="about:blank"] {
-				display: none;
+			iframe[src="about:blank"] { display: none; }
+			/* make sure the captcha uses auto table layout */
+			.recaptchatable { table-layout: auto; }
+<?php
+			// @since 2.0.3 allow adding custom styles to captcha instances
+			if ($this->options['use_custom_styles'] && !empty($this->options['custom_styles'])) {
+				echo  esc_html($this->options['custom_styles']);
 			}
+?>
 		</style>
 <?php
 			if ($this->options['theme'] != 'custom') {
@@ -105,7 +111,7 @@ class BWP_Recaptcha_Provider_V1 extends BWP_Recaptcha_Provider
 			? $_POST['recaptcha_challenge_field']
 			: null;
 
-		$userResponse = $userResponse ?: (!empty($_POST['recaptcha_response_field'])
+		$userResponse = $userResponse ? $userResponse : (!empty($_POST['recaptcha_response_field'])
 			? $_POST['recaptcha_response_field']
 			: null);
 
@@ -176,7 +182,7 @@ class BWP_Recaptcha_Provider_V1 extends BWP_Recaptcha_Provider
 		if (!function_exists('recaptcha_get_html')
 			|| !function_exists('recaptcha_check_answer')
 		) {
-			require_once __DIR__ . '/recaptcha/recaptchalib.php';
+			require_once dirname(__FILE__) . '/recaptcha/recaptchalib.php';
 		}
 	}
 }

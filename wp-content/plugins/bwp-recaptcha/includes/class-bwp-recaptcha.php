@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright (c) 2015 Khang Minh <betterwp.net>
+ * Copyright (c) 2011 Khang Minh <betterwp.net>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +33,11 @@ function bwp_capt_comment_form($args = array(), $post_id = null)
 
 	ob_start();
 
+	/**
+	 * Fire where a recaptcha should be rendered.
+	 *
+	 * This action hooks is mostly used to render the captcha in certain forms.
+	 */
 	do_action('bwp_recaptcha_add_markups');
 	$recaptcha_html = ob_get_contents();
 
@@ -45,7 +51,7 @@ function bwp_capt_comment_form($args = array(), $post_id = null)
 	comment_form($args, $post_id);
 }
 
-class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
+class BWP_RECAPTCHA extends BWP_Framework_V3
 {
 	/**
 	 * reCAPTCHA built-in languages
@@ -97,9 +103,9 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 	/**
 	 * {@inheritDoc}
 	 */
-	public function __construct(array $meta)
+	public function __construct(array $meta, BWP_WP_Bridge $bridge = null)
 	{
-		parent::__construct($meta);
+		parent::__construct($meta, $bridge);
 
 		// Basic version checking
 		if (!$this->check_required_versions())
@@ -109,21 +115,27 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 		$options = array(
 			'input_pubkey'             => '',
 			'input_prikey'             => '',
-			'input_error'              => __('<strong>ERROR:</strong> Incorrect or '
+			'input_error'              => $this->bridge->t('<strong>ERROR:</strong> Incorrect or '
 				. 'empty reCAPTCHA response, please try again.', $this->domain),
-			'input_back'               => __('Error: Incorrect or empty reCAPTCHA response, '
+			'input_back'               => $this->bridge->t('Error: Incorrect or empty reCAPTCHA response, '
 				. 'please click the back button on your browser\'s toolbar or '
 				. 'click on %s to go back.', $this->domain),
 			'input_approved'           => 1,
 			'input_tab'                => 0,
+			'input_error_cf7'          => $this->bridge->t('Incorrect or empty reCAPTCHA response, '
+				. 'please try again.', $this->domain),
+			'input_v1_styles'          => $this->get_default_v1_custom_styles(), // @since 2.0.3
+			'input_v2_styles'          => $this->get_default_v2_custom_styles(), // @since 2.0.3
 			'enable_comment'           => 'yes',
 			'enable_registration'      => '',
 			'enable_login'             => '',
 			'enable_akismet'           => '',
 			'enable_cf7'               => 'yes', // @since 2.0.0
+			'enable_cf7_spam'          => 'yes', // @since 2.0.2
 			'enable_auto_fill_comment' => '',
 			'enable_css'               => 'yes',
 			'enable_v1_https'          => '', // @since 2.0.0, force recaptcha v1 to use https
+			'enable_custom_styles'     => '', // @since 2.0.3
 			'use_recaptcha_v1'         => '', // @since 2.0.0 whether to use recaptcha v1
 			'use_global_keys'          => 'yes',
 			'select_lang'              => 'en',
@@ -136,21 +148,62 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 			'select_v2_size'           => 'normal', // @since 2.0.0
 			'select_v2_jsapi_position' => 'on_demand', // @since 2.0.0 load on all pages or only when needed
 			'select_akismet_react'     => 'hold',
+			'select_request_method'    => 'auto', // @since 2.0.3
 			'hide_registered'          => '',
 			'hide_cap'                 => '',
-			'hide_approved'            => ''
+			'hide_approved'            => '',
+			'nag_only_recaptcha_v1'    => 'yes'
 		);
 
 		$this->add_option_key('BWP_CAPT_OPTION_GENERAL', 'bwp_capt_general',
-			__('General Options', $this->domain)
+			$this->bridge->t('General Options', $this->domain)
 		);
 		$this->add_option_key('BWP_CAPT_OPTION_THEME', 'bwp_capt_theme',
-			__('Theme Options', $this->domain)
+			$this->bridge->t('Theme Options', $this->domain)
 		);
 
-		$this->build_properties('BWP_CAPT', $this->domain, $options,
-			'BetterWP reCAPTCHA', dirname(dirname(__FILE__)) . '/bwp-recaptcha.php',
+		$this->build_properties('BWP_CAPT', $options,
+			dirname(dirname(__FILE__)) . '/bwp-recaptcha.php',
 			'http://betterwp.net/wordpress-plugins/bwp-recaptcha/', false);
+	}
+
+	private function get_default_v1_custom_styles()
+	{
+		$styles = array(
+			'#recaptcha_widget_div {',
+			'    display: block;',
+			'    clear: both;',
+			'    margin-bottom: 1em;',
+			'}'
+		);
+
+		return implode("\n", $styles);
+	}
+
+	private function get_default_v2_custom_styles()
+	{
+		$styles = array(
+			'.g-recaptcha {',
+			'    display: block;',
+			'    clear: both;',
+			'    margin-bottom: 1em;',
+			'}'
+		);
+
+		return implode("\n", $styles);
+	}
+
+	/**
+	 * Whether we should use the old recaptcha
+	 *
+	 * @return bool
+	 */
+	public function should_use_old_recaptcha()
+	{
+		if ('yes' == $this->options['use_recaptcha_v1'] || !BWP_Version::get_current_php_version('5.3.2'))
+			return true;
+
+		return false;
 	}
 
 	/**
@@ -241,12 +294,27 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 
 	protected function pre_init_properties()
 	{
-		$this->lang    = include_once __DIR__ . '/provider/v1-languages.php';
-		$this->v2_lang = include_once __DIR__ . '/provider/v2-languages.php';
+		$this->lang    = include_once dirname(__FILE__) . '/provider/v1-languages.php';
+		$this->v2_lang = include_once dirname(__FILE__) . '/provider/v2-languages.php';
 
-		$this->caps = apply_filters('bwp_capt_bypass_caps', array(
-			__('Read Profile', $this->domain)   => 'read',
-			__('Manage Options', $this->domain) => 'manage_options'
+		/**
+		 * Filter WordPress capabilities that can bypass a recaptcha.
+		 *
+		 * @see https://codex.wordpress.org/Roles_and_Capabilities
+		 *
+		 * @param array $capabilities The capabilities to filter.
+		 *
+		 * @return array Example:
+		 * ```
+		 * return $caps = array(
+		 *     'Read Profile' => 'read',
+		 *     'Manage Options' => 'manage_options'
+		 * );
+		 * ```
+		 */
+		$this->caps = $this->bridge->apply_filters('bwp_capt_bypass_caps', array(
+			$this->bridge->t('Read Profile', $this->domain)   => 'read',
+			$this->bridge->t('Manage Options', $this->domain) => 'manage_options'
 		));
 
 		// @since 1.1.0 init public and private keys based on multi-site setting
@@ -296,25 +364,30 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 	 */
 	private function _wp_registration_url()
 	{
-		return apply_filters('register_url', site_url('wp-login.php?action=register', 'login'));
+		return $this->bridge->apply_filters('register_url', $this->bridge->site_url('wp-login.php?action=register', 'login'));
 	}
 
 	protected function determine_current_page()
 	{
-		$login_path    = str_replace(home_url(), '', wp_login_url());
-		$register_path = str_replace(home_url(), '', $this->_wp_registration_url());
+		// @since 2.0.3 only strip the host and scheme (including https), so
+		// we can properly compare with REQUEST_URI later on.
+		$login_path    = preg_replace('#https?://[^/]+/#i', '', $this->bridge->wp_login_url());
+		$register_path = preg_replace('#https?://[^/]+/#i', '', $this->_wp_registration_url());
 
-		if (strpos($_SERVER['REQUEST_URI'], $register_path) === 0)
+		global $pagenow;
+
+		$request_uri = ltrim($_SERVER['REQUEST_URI'], '/');
+		if (strpos($request_uri, $register_path) === 0)
 		{
 			// whether user is requesting regular user registration page
 			$this->is_reg = true;
 		}
-		elseif (strpos($_SERVER['REQUEST_URI'], $login_path) === 0)
+		elseif (strpos($request_uri, $login_path) === 0)
 		{
 			// whether user is requesting the wp-login page
 			$this->is_login = true;
 		}
-		elseif (strpos($_SERVER['REQUEST_URI'], 'wp-signup.php') !== false)
+		elseif (!empty($pagenow) && $pagenow == 'wp-signup.php')
 		{
 			// whether user is requesting wp-signup page (multi-site page for
 			// user/site registration)
@@ -333,7 +406,7 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 			// installed and activated
 			// @since 2.0.0 this should use appropriate class for current
 			// version of recaptcha
-			if ('yes' == $this->options['use_recaptcha_v1'])
+			if ($this->should_use_old_recaptcha())
 				BWP_Recaptcha_CF7_V1::init($this);
 			else
 				BWP_Recaptcha_CF7_V2::init($this);
@@ -365,13 +438,13 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 			elseif ($this->options['select_position'] == 'after_comment_field')
 			{
 				/**
-					* show captcha after comment field (default @since 1.1.1)
-					*
-					* @since 2.0.0 and @since WordPress 4.2.0
-					* there's a new filter to add recaptcha that doesn't
-					* rely on the fragile `comment_notes_after`, we will
-					* use that if possible
-					*/
+				 * show captcha after comment field (default @since 1.1.1)
+				 *
+				 * @since 2.0.0 and @since WordPress 4.2.0
+				 * there's a new filter to add recaptcha that doesn't
+				 * rely on the fragile `comment_notes_after`, we will
+				 * use that if possible
+				 */
 				if (version_compare($this->get_current_wp_version(), '4.2', '>='))
 					add_filter('comment_form_submit_field', array($this, 'add_recaptcha_before_comment_submit_field'));
 				else
@@ -438,23 +511,32 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 
 	protected function enqueue_media()
 	{
-		if ($this->is_admin_page(BWP_CAPT_OPTION_GENERAL))
+		if ($this->is_admin_page())
 		{
-			// some JS to toggle fields' visibility in General Options page
-			wp_enqueue_script('bwp-recaptcha', BWP_CAPT_JS . '/bwp-recaptcha.js', array('jquery'));
+			wp_enqueue_script('bwp-capt-admin', BWP_CAPT_JS . '/admin.js', array('bwp-op'), $this->plugin_ver, true);
+
+			if ($this->is_admin_page(BWP_CAPT_OPTION_THEME))
+			{
+				wp_enqueue_style('bwp-codemirror');
+				wp_enqueue_script('bwp-codemirror-css');
+				wp_enqueue_script('bwp-op-codemirror');
+			}
 		}
 
 		if ('yes' == $this->options['enable_css'])
 		{
-			// load default CSS if needed
-			$theme        = $this->options['select_theme'];
-			$bwp_capt_css = apply_filters('bwp_capt_css', BWP_CAPT_CSS . '/bwp-recaptcha.css');
-
 			if ('custom' == $this->options['select_theme']
 				&& ($this->is_admin_page(BWP_CAPT_OPTION_THEME) || !is_admin())
 			) {
-				// load default CSS for custom theme
-				wp_enqueue_style('bwp-capt', $bwp_capt_css);
+				/**
+				 * Filter the CSS file used for Custom Theme.
+				 *
+				 * This filter is used for **reCAPTCHA version 1** only.
+				 *
+				 * @param string $css_file An absolute URL to the CSS file.
+				 */
+				$custom_theme_css = apply_filters('bwp_capt_css', BWP_CAPT_CSS . '/custom-theme.css');
+				wp_enqueue_style('bwp-capt', $custom_theme_css);
 			}
 		}
 
@@ -462,7 +544,8 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 		if (('yes' == $this->options['enable_registration'] && $this->is_reg)
 			|| ('yes' == $this->options['enable_login'] && $this->is_login)
 		) {
-			add_action('login_head', array($this, 'print_inline_styles_for_login'), 11); // make sure this is late enough
+			// priority 11 so our inline styles are printed after other styles
+			add_action('login_head', array($this, 'print_inline_styles_for_login'), 11);
 		}
 	}
 
@@ -477,6 +560,9 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 	public function print_inline_styles_for_login()
 	{
 		$login_width = 'clean' == $this->options['select_theme'] ? 482 : 362;
+
+		// recaptcha v2 requires a different width
+		$login_width = ! $this->should_use_old_recaptcha() ? 350 : $login_width;
 ?>
 		<style type="text/css">
 			#login {
@@ -544,10 +630,28 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 		endif;
 	}
 
+	private function _get_available_request_methods()
+	{
+		$methods = array(
+			__('Auto detected', $this->domain) => 'auto'
+		);
+
+		if (function_exists('fsockopen'))
+			$methods['Socket (fsockopen)'] = 'socket';
+
+		if (extension_loaded('curl'))
+			$methods['cURL'] = 'curl';
+
+		if (ini_get('allow_url_fopen'))
+			$methods['file_get_contents'] = 'fileio';
+
+		return $methods;
+	}
+
 	protected function build_option_page()
 	{
 		$page         = $this->get_current_admin_page();
-		$option_page  = $this->curren_option_page;
+		$option_page  = $this->current_option_page;
 		$form_options = array();
 
 		if (!empty($page))
@@ -558,35 +662,41 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 
 				$form = array(
 					'items' => array(
-						'heading',
+						'heading', // recaptcha api keys
 						'checkbox',
 						'input',
 						'input',
-						'heading',
+						'heading', // recaptcha setting
 						'checkbox',
 						'checkbox',
+						'select',
+						'heading', // main functionality
 						'section',
 						'section',
-						'heading',
+						'heading', // comment form
 						'select',
 						'select',
 						'checkbox',
 						'input',
 						'input',
-						'heading',
+						'heading', // akistmet integration
 						'checkbox',
 						'select',
-						'heading',
-						'checkbox'
+						'heading', // contact form 7 integration
+						'checkbox',
+						'checkbox',
+						'input'
 					),
 					'item_labels' => array(
 						__('reCAPTCHA API Keys', $this->domain),
 						__('Use main site\'s keys', $this->domain),
 						__('Site Key', $this->domain),
 						__('Secret Key', $this->domain),
-						__('Plugin Functionality', $this->domain),
+						__('reCAPTCHA Settings', $this->domain),
 						__('Use reCAPTCHA version 1', $this->domain),
 						__('Force https', $this->domain),
+						__('Request method', $this->domain),
+						__('Main Functionality', $this->domain),
 						__('Enable this plugin for', $this->domain),
 						__('Hide captcha for', $this->domain),
 						__('reCAPTCHA for comment form', $this->domain),
@@ -596,19 +706,23 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 						__('Invalid captcha error message', $this->domain),
 						__('Invalid captcha error message', $this->domain),
 						__('Akismet Integration for comment form', $this->domain),
-						__('Integrate with Akismet?', $this->domain),
+						__('Integrate with Akismet', $this->domain),
 						__('If correct captcha response', $this->domain),
 						__('Contact Form 7 Integration', $this->domain),
-						__('Integrate with Contact Form 7?', $this->domain)
+						__('Integrate with Contact Form 7', $this->domain),
+						__('Treat invalid captcha as spam', $this->domain),
+						__('Invalid captcha error message', $this->domain)
 					),
 					'item_names' => array(
 						'h1',
 						'use_global_keys',
 						'input_pubkey',
 						'input_prikey',
-						'heading_func',
+						'heading_recaptcha',
 						'use_recaptcha_v1',
 						'enable_v1_https',
+						'select_request_method',
+						'heading_func',
 						'sec1',
 						'sec2',
 						'heading_comment',
@@ -618,10 +732,12 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 						'input_error',
 						'input_back',
 						'h3',
-						'cb6',
+						'enable_akismet',
 						'select_akismet_react',
 						'heading_cf7',
-						'enable_cf7'
+						'enable_cf7',
+						'enable_cf7_spam',
+						'input_error_cf7'
 					),
 					'heading' => array(
 						'h1' => '<em>' . sprintf(
@@ -630,7 +746,8 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 							. 'Once you have created those two keys for the current domain, '
 							. 'simply paste them below.</em>', $this->domain),
 							'https://www.google.com/recaptcha/admin/create'),
-						'heading_func' => '<em>' . __('Control how this plugin works.', $this->domain) . '</em>',
+						'heading_recaptcha' => '',
+						'heading_func' => '',
 						'heading_comment' => '<em>' . __('Settings that are applied to '
 							. 'comment forms only.', $this->domain) . '</em>',
 						'h3' => '<em>' . __('Integrate the comment form with Akismet for better end-user experience.', $this->domain) . ' '
@@ -640,16 +757,17 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 							. 'This only works if you have Contact Form 7 activated.', $this->domain) . '</em>'
 					),
 					'sec1' => array(
-						array('checkbox', 'name' => 'cb1'),
-						array('checkbox', 'name' => 'cb2'),
-						array('checkbox', 'name' => 'cb8')
+						array('checkbox', 'name' => 'enable_comment'),
+						array('checkbox', 'name' => 'enable_registration'),
+						array('checkbox', 'name' => 'enable_login')
 					),
 					'sec2' => array(
-						array('checkbox', 'name' => 'cb3'),
-						array('checkbox', 'name' => 'cb4'),
-						array('checkbox', 'name' => 'cb5')
+						array('checkbox', 'name' => 'hide_registered'),
+						array('checkbox', 'name' => 'hide_cap'),
+						array('checkbox', 'name' => 'hide_approved')
 					),
 					'select' => array(
+						'select_request_method' => $this->_get_available_request_methods(),
 						'select_cap' => $this->caps,
 						'select_position' => array(
 							__('After comment field', $this->domain) => 'after_comment_field',
@@ -665,37 +783,37 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 						)
 					),
 					'checkbox'	=> array(
-						'cb1' => array(
-							__('Comment form.', $this->domain) => 'enable_comment'
+						'enable_comment' => array(
+							__('Comment form', $this->domain) => ''
 						),
-						'cb2' => array(
-							__('Registration form (user/site registration).', $this->domain) => 'enable_registration'
+						'enable_registration' => array(
+							__('Registration form (user/site registration)', $this->domain) => ''
 						),
-						'cb8' => array(
-							__('Login form.', $this->domain) => 'enable_login'
+						'enable_login' => array(
+							__('Login form', $this->domain) => ''
 						),
-						'cb3' => array(
-							__('registered users <em>(even without any capabilities)</em>.', $this->domain) => 'hide_registered'
+						'hide_registered' => array(
+							__('registered users <em>(even without any capabilities)</em>.', $this->domain) => ''
 						),
-						'cb4' => array(
-							__('users who can', $this->domain) => 'hide_cap'
+						'hide_cap' => array(
+							__('users who can', $this->domain) => ''
 						),
-						'cb5' => array(
-							__('visitors who have at least', $this->domain) => 'hide_approved'
+						'hide_approved' => array(
+							__('visitors who have at least', $this->domain) => ''
 						),
-						'cb6' => array(
-							__('A captcha is only shown when Akismet identifies a comment as spam. '
+						'enable_akismet' => array(
+							__('Show captcha only when Akismet identifies a comment as spam. '
 							. 'Highly recommended if you do not want to '
-							. 'force your visitors to enter a captcha every time.', $this->domain) => 'enable_akismet'
+							. 'force your visitors to enter a captcha every time.', $this->domain) => ''
 						),
 						'use_global_keys' => array(
-							__('uncheck to use different key pairs for this site.', $this->domain) => 'use_global_keys'
+							__('Uncheck to use different key pairs for this site.', $this->domain) => ''
 						),
 						'use_recaptcha_v1' => array(
-							__('check this if you prefer the oldschool recaptcha.', $this->domain) => 'use_recaptcha_v1'
+							__('Use the oldschool recaptcha instead of the new <em>nocaptcha</em> recaptcha.', $this->domain) => ''
 						),
 						'enable_v1_https' => array(
-							__('check this to make requests to reCAPTCHA server always secured.', $this->domain) => 'enable_v1_https'
+							__('Make requests to recaptcha server always secured.', $this->domain) => 'enable_v1_https'
 						),
 						'enable_auto_fill_comment' => array(
 							__('After redirected, auto fill the comment field with previous comment.', $this->domain)
@@ -703,48 +821,108 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 							. sprintf(
 								__('This feature requires an active <a target="_blank" href="%s">PHP session</a>.', $this->domain),
 								'http://php.net/manual/en/intro.session.php'
-							) => 'enable_auto_fill_comment'
+							) => ''
 						),
 						'enable_cf7' => array(
-							__('With this you can use the <code>recaptcha</code> shortcode tag in your Contact Form 7 forms.', $this->domain) => 'enable_cf7'
+							__('Add the <code>recaptcha</code> shortcode tag to your Contact Form 7 forms.', $this->domain) => ''
+						),
+						'enable_cf7_spam' => array(
+							__('Treat invalid captcha response as spam instead of validation error', $this->domain) => ''
 						)
 					),
 					'input'	=> array(
 						'input_pubkey'   => array(
-							'size' => 50,
-							'label' => '<br />' . __('A public key used to '
-								. 'request captchas from reCAPTCHA server.', $this->domain)
+							'size' => 50
 						),
 						'input_prikey'   => array(
-							'size' => 50,
-							'label' => '<br />' . __('A private (secret) key used to '
-								. 'authenticate user\'s response.', $this->domain)
+							'size' => 50
 						),
 						'input_error'    => array(
-							'size' => 90,
-							/* 'label' => '<br />' . __('when redirect commenter back to the comment form.', $this->domain) */
+							'size' => 90
 						),
 						'input_back'     => array(
-							'size' => 90,
-							/* 'label' => '<br />' . __('when show the normal error page with no redirection.', $this->domain) */
+							'size' => 90
 						),
 						'input_approved' => array(
 							'size' => 3,
 							'label' => __('approved comment(s).', $this->domain)
+						),
+						'input_error_cf7' => array(
+							'size' => 90
 						)
 					),
-					'container' => array(
-						'cb8' => ''
-					),
-					'post' => array(
-						'select_akismet_react' => '<br />'
-							. __('It is best to put comments identified as spam in moderation queue '
-							. 'so you are able to review and instruct '
-							. 'Akismet to correctly handle similar comments in the future.</em>', $this->domain)
-					),
 					'inline_fields' => array(
-						'cb4' => array('select_cap' => 'select'),
-						'cb5' => array('input_approved' => 'input')
+						'hide_cap'      => array('select_cap' => 'select'),
+						'hide_approved' => array('input_approved' => 'input')
+					),
+					'helps' => array(
+						'input_pubkey' => array(
+							'type'    => 'focus',
+							'content' => __('A public key used to '
+								. 'request captchas from reCAPTCHA server.', $this->domain),
+							'placement' => 'right'
+						),
+						'input_prikey' => array(
+							'type'    => 'focus',
+							'content' => __('A private (secret) key used to '
+								. 'authenticate user\'s response.', $this->domain),
+							'placement' => 'right'
+						),
+						'select_request_method' => array(
+							'target' => 'icon',
+							'content' => __('To verify a captcha response, '
+								. 'this plugin needs to send requests to the reCAPTCHA server, '
+								. 'using a specific request method. '
+								. '<br /><br />'
+								. 'By default, BWP reCAPTCHA use the first available request method, '
+								. 'be it Socket (<code>fsockopen</code>), cURL, or <code>file_get_contents</code>.', $this->domain)
+								. '<br /><br />'
+								. __('If you encounter error such as <code>Unknown error (invalid-json)</code>'
+								. 'when submitting a form, try selecting a specific request method here.', $this->domain),
+							'size' => 'small'
+						),
+						'select_akismet_react' => array(
+							'target'  => 'icon',
+							'content' => __('It is best to put comments identified as spam in moderation queue '
+								. 'so you are able to review and instruct '
+								. 'Akismet to correctly handle similar comments in the future.', $this->domain)
+							),
+						'input_error' => array(
+							'target'  => 'icon',
+							'content' => __('This is shown when the commenter is redirected '
+								. 'back to the comment form.', $this->domain)
+						),
+						'input_back' => array(
+							'target'  => 'icon',
+							'content' => __('This is shown on the standard WordPress error page.', $this->domain)
+						),
+						'enable_cf7_spam' => array(
+							'type'    => 'link',
+							'content' => 'http://contactform7.com/spam-filtering-with-akismet/'
+						),
+						'input_error_cf7' => array(
+							'target'  => 'icon',
+							'content' => __('This message is shown when '
+								. 'invalid captcha response is treated as '
+								. 'a standard validation error. '
+								. 'Leave blank to not use.', $this->domain)
+						)
+					),
+					'attributes' => array(
+						'use_recaptcha_v1' => array(
+							'class'             => 'bwp-switch-select bwp-switch-on-load',
+							'data-target'       => 'enable_v1_https',
+						),
+						'select_response' => array(
+							'class'             => 'bwp-switch-select bwp-switch-on-load',
+							'data-target'       => 'enable_auto_fill_comment',
+							'data-toggle-value' => 'redirect'
+						),
+						'enable_cf7_spam' => array(
+							'class'                => 'bwp-switch-select bwp-switch-on-load',
+							'data-target'          => 'input_error_cf7',
+							'data-checkbox-invert' => '1'
+						)
 					),
 					'env' => array(
 						'use_global_keys' => 'multisite'
@@ -752,10 +930,14 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 					'blog' => array(
 						'use_global_keys' => 'sub'
 					),
+					'php' => array(
+						'use_recaptcha_v1' => '50302'
+					),
 					'formats' => array(
-						'input_approved' => 'int',
-						'input_error'    => 'html',
-						'input_back'     => 'html'
+						'input_approved'  => 'int',
+						'input_error'     => 'html',
+						'input_back'      => 'html',
+						'input_error_cf7' => 'html'
 					)
 				);
 
@@ -764,6 +946,7 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 					'use_global_keys',
 					'use_recaptcha_v1',
 					'enable_v1_https',
+					'select_request_method',
 					'input_pubkey',
 					'input_prikey',
 					'input_error',
@@ -781,7 +964,9 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 					'select_response',
 					'enable_akismet',
 					'select_akismet_react',
-					'enable_cf7'
+					'enable_cf7',
+					'enable_cf7_spam',
+					'input_error_cf7'
 				);
 
 				// show appropriate fields based on multi-site setting
@@ -792,9 +977,10 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 				$option_page->set_current_tab(2);
 
 				// @since 2.0.0 differnet settings for different recaptcha
-				$form = $this->options['use_recaptcha_v1'] == 'yes' ? array(
+				$form = $this->should_use_old_recaptcha() ? array(
 					'items' => array(
 						'select',
+						'checkbox',
 						'checkbox',
 						'select',
 						'input',
@@ -803,20 +989,22 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 					'item_labels' => array(
 						__('reCAPTCHA theme', $this->domain),
 						__('Use default CSS', $this->domain),
+						__('Enable custom CSS', $this->domain),
 						__('Language for built-in themes', $this->domain),
 						__('Tabindex for captcha input field', $this->domain),
 						__('Preview your reCAPTCHA', $this->domain)
 					),
 					'item_names' => array(
 						'select_theme',
-						'cb1',
+						'enable_css',
+						'enable_custom_styles',
 						'select_lang',
 						'input_tab',
 						'h1'
 					),
 					'heading' => array(
 						'h1' => __('<em>Below you will see how your reCAPTCHA will look. '
-							. 'Note that this might differ on your actual pages.<br /></em>', $this->domain)
+							. 'Note that this might differ on your actual pages.</em>', $this->domain)
 					),
 					'select' => array(
 						'select_theme' => array(
@@ -829,32 +1017,66 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 						'select_lang' => $this->lang
 					),
 					'checkbox' => array(
-						'cb1' => array(
-							sprintf(__('This is for Custom Theme only. '
-								. 'Disable this and add your own CSS to style the Custom Theme. '
-								. 'More info <a href="%s#recaptcha-version-1" target="_blank">here</a>.', $this->domain),
-								BWP_CAPT_PLUGIN_URL) => 'enable_css'
-						)
+						'enable_css'           => array('' => ''),
+						'enable_custom_styles' => array(__('Add additional CSS rules '
+							. 'to all recaptcha instances. You can edit them below.', $this->domain) . '<br />' => '')
 					),
 					'input'	=> array(
 						'input_tab' => array(
-							'size' => 3,
-							'label' => '<br />' . __('This should be 4 if you '
-							. 'place the captcha before the textarea, '
-							. 'and 5 if you put it after. Set to 0 to disable.', $this->domain)
+							'size' => 3
 						)
+					),
+					'textarea' => array(
+						'input_v1_styles' => array(
+							'cols' => 90,
+							'rows' => 10
+						)
+					),
+					'inline_fields' => array(
+						'enable_custom_styles' => array('input_v1_styles' => 'textarea')
 					),
 					'container' => array(
 					),
-					'post' => array(
-						'select_lang' => sprintf(__('If you would like to add custom translations, '
-							. 'please read <a href="%s" target="_blank">this dedicated tip</a>.', $this->domain),
-							'http://betterwp.net/wordpress-tips/how-to-add-custom-translations-to-bwp-recaptcha/')
+					'helps' => array(
+						'enable_css' => array(
+							'type'    => 'switch',
+							'target'  => 'icon',
+							'content' => sprintf(
+								__('Read <a href="%s#recaptcha-version-1" target="_blank">here</a> '
+								. 'to know how to use your own CSS for the Custom Theme.', $this->domain),
+								BWP_CAPT_PLUGIN_URL
+							)
+						),
+						'select_lang' => array(
+							'type'    => 'switch',
+							'target'  => 'icon',
+							'content' => sprintf(
+								__('If you want to add custom translations, '
+								. 'please read <a href="%s" target="_blank">this tip</a>.', $this->domain),
+								'http://betterwp.net/wordpress-tips/how-to-add-custom-translations-to-bwp-recaptcha/'
+							)
+						)
+					),
+					'attributes' => array(
+						'select_theme' => array(
+							'class'             => 'bwp-switch-select bwp-switch-on-load',
+							'data-target'       => 'enable_css',
+							'data-toggle-value' => 'custom'
+						),
+						'enable_custom_styles' => array(
+							'class'       => 'bwp-code-editor-cb',
+							'data-target' => 'input_v1_styles'
+						),
+						'input_v1_styles' => array(
+							'class'     => 'bwp-form-control bwp-code-editor',
+							'data-mode' => 'css'
+						)
 					)
 				) : array(
 					'items' => array(
 						'select',
 						'select',
+						'checkbox',
 						'select',
 						'input',
 						'heading'
@@ -862,6 +1084,7 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 					'item_labels' => array(
 						__('reCAPTCHA theme', $this->domain),
 						__('reCAPTCHA size', $this->domain),
+						__('Enable custom CSS', $this->domain),
 						__('Language', $this->domain),
 						__('Tabindex for captcha input field', $this->domain),
 						__('Preview your reCAPTCHA', $this->domain)
@@ -869,13 +1092,14 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 					'item_names' => array(
 						'select_v2_theme',
 						'select_v2_size',
+						'enable_custom_styles',
 						'select_v2_lang',
 						'input_tab',
 						'h1'
 					),
 					'heading' => array(
 						'h1' => __('<em>Below you will see how your reCAPTCHA will look. '
-							. 'Note that this might differ on your actual pages.<br /></em>', $this->domain)
+							. 'Note that this might differ on your actual pages.</em>', $this->domain)
 					),
 					'select' => array(
 						'select_v2_theme' => array(
@@ -895,35 +1119,62 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 						/* 	__('Manually', $this->domain)    => 'manually' */
 						/* ) */
 					),
+					'checkbox' => array(
+						'enable_custom_styles' => array(__('Add additional CSS rules '
+							. 'to all recaptcha instances. You can edit them below.', $this->domain) . '<br />' => '')
+					),
 					'input'	=> array(
 						'input_tab' => array(
-							'size' => 3,
-							'label' => '<br />' . __('This should be 4 if you '
-							. 'place the captcha before the textarea, '
-							. 'and 5 if you put it after. Set to 0 to disable.', $this->domain)
+							'size'  => 3,
+							'label' => __('Set to 0 to disable.', $this->domain)
+						)
+					),
+					'textarea' => array(
+						'input_v2_styles' => array(
+							'cols' => 90,
+							'rows' => 10
+						)
+					),
+					'inline_fields' => array(
+						'enable_custom_styles' => array('input_v2_styles' => 'textarea')
+					),
+					'attributes' => array(
+						'enable_custom_styles' => array(
+							'class'       => 'bwp-code-editor-cb',
+							'data-target' => 'input_v2_styles'
+						),
+						'input_v2_styles' => array(
+							'class'     => 'bwp-form-control bwp-code-editor',
+							'data-mode' => 'css'
 						)
 					)
 				);
 
-				$form_options = $this->options['use_recaptcha_v1'] == 'yes'
+				$form = array_merge_recursive($form, array(
+					'formats' => array(
+						'input_tab' => 'int'
+					),
+					'container' => array(
+						'h1' => $this->get_recaptcha()
+					)
+				));
+
+				$form_options = $this->should_use_old_recaptcha()
 					? array(
 						'select_lang',
 						'select_theme',
 						'input_tab',
+						'enable_custom_styles',
+						'input_v1_styles',
 						'enable_css'
 					) : array(
 						'select_v2_theme',
 						'select_v2_size',
 						'select_v2_lang',
-						'input_tab'
+						'input_tab',
+						'enable_custom_styles',
+						'input_v2_styles'
 					);
-
-				$form['formats'] = array(
-					'input_tab' => 'int'
-				);
-
-				// preview reCAPTCHA
-				add_action('bwp_option_action_before_submit_button', array($this, 'add_recaptcha'));
 			}
 		}
 
@@ -945,6 +1196,29 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 			);
 		}
 
+		// @since 2.0.3 if the current PHP version is smaller than 5.3.2, and we
+		// need to nag user that only recaptcha v1 can be used
+		if (! BWP_Version::get_current_php_version('5.3.2')
+			&& $this->options['nag_only_recaptcha_v1'] == 'yes'
+		) {
+			$this->add_notice(
+				'<strong>' . __('Notice') . ':</strong> '
+				. sprintf(
+					__('In order to use the nocaptcha recaptcha (recaptcha v2), '
+					. 'you need at least <strong>PHP 5.3.2</strong> '
+					. '(your current PHP version is <strong>%s</strong>), '
+					. 'so only recaptcha v1 can be used. '
+					. 'It is recommended to contact your host to '
+					. 'know how to update your current version of PHP.', $this->domain),
+					BWP_Version::get_current_php_version()
+				)
+			);
+
+			$this->update_some_options(BWP_CAPT_OPTION_GENERAL, array(
+				'nag_only_recaptcha_v1' => ''
+			));
+		}
+
 		if ('yes' == $this->options['enable_akismet'] && !defined('AKISMET_VERSION'))
 		{
 			// add a notice if Akismet integration is enabled but Akismet
@@ -956,7 +1230,7 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 			);
 		}
 
-		$this->curren_option_page->generate_html_form();
+		$this->current_option_page->generate_html_form();
 	}
 
 	/**
@@ -994,13 +1268,13 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 	{
 		global $wpdb;
 
-		if ('yes' == $this->options['hide_registered'] && is_user_logged_in())
+		if ('yes' == $this->options['hide_registered'] && $this->bridge->is_user_logged_in())
 			// do not show captcha to logged in users
 			return true;
 
 		if ('yes' == $this->options['hide_cap']
 			&& !empty($this->options['select_cap'])
-			&& current_user_can($this->options['select_cap']))
+			&& $this->bridge->current_user_can($this->options['select_cap']))
 		{
 			// user must have certain capabilities in order to bypass captcha
 			return true;
@@ -1014,7 +1288,7 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 
 		if ('yes' == $this->options['hide_approved'])
 		{
-			$commenter = wp_get_current_commenter();
+			$commenter = $this->bridge->wp_get_current_commenter();
 			foreach ($commenter as $key => &$commenter_field)
 			{
 				$commenter_field = trim(strip_tags($commenter_field));
@@ -1069,6 +1343,23 @@ class BWP_RECAPTCHA extends BWP_FRAMEWORK_V2
 	{
 		$errors = !is_wp_error($errors) ? new WP_Error() : $errors;
 		$this->provider->renderCaptcha($errors, $formId);
+	}
+
+	/**
+	 * Get rendered captcha HTML
+	 *
+	 * @return string
+	 * @since 2.0.2
+	 */
+	public function get_recaptcha()
+	{
+		ob_start();
+
+		$this->add_recaptcha();
+
+		$output = ob_get_clean();
+
+		return $output;
 	}
 
 	/**

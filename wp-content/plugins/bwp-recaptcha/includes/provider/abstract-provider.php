@@ -16,10 +16,13 @@ abstract class BWP_Recaptcha_Provider
 
 	protected $domain;
 
-	public function __construct(array $options, $domain)
+	protected $bridge;
+
+	public function __construct(array $options, $domain, BWP_WP_Bridge $bridge)
 	{
 		$this->options = $options;
 		$this->domain  = $domain;
+		$this->bridge  = $bridge;
 	}
 
 	public static function create(BWP_RECAPTCHA $plugin)
@@ -28,29 +31,36 @@ abstract class BWP_Recaptcha_Provider
 		$domain  = $plugin->domain;
 
 		$providerOptions = array(
-			'site_key'                 => $options['input_pubkey'],
-			'secret_key'               => $options['input_prikey'],
-			'theme'                    => $options['select_theme'],
-			'language'                 => $options['select_lang'],
-			'tabindex'                 => $options['input_tab'],
-			'invalid_response_message' => $options['input_error'],
+			'site_key'                     => $options['input_pubkey'],
+			'secret_key'                   => $options['input_prikey'],
+			'request_method'               => $options['select_request_method'],
+			'theme'                        => $options['select_theme'],
+			'language'                     => $options['select_lang'],
+			'tabindex'                     => $options['input_tab'],
+			'invalid_response_message'     => $options['input_error'],
+			'invalid_response_message_cf7' => $options['input_error_cf7'],
+			'use_custom_styles'            => $options['enable_custom_styles'],
 		);
 
-		if ('yes' == $options['use_recaptcha_v1']) {
+		// if instructed to use recaptcha v1, or the current PHP version is
+		// less than 5.3.2, we need to use v1 provider
+		if ($plugin->should_use_old_recaptcha()) {
 			$providerOptions = array_merge($providerOptions, array(
-				'use_ssl' => $options['enable_v1_https']
+				'use_ssl'       => $options['enable_v1_https'],
+				'custom_styles' => $options['input_v1_styles']
 			));
 
-			return new BWP_Recaptcha_Provider_V1($providerOptions, $domain);
+			return new BWP_Recaptcha_Provider_V1($providerOptions, $domain, $plugin->get_bridge());
 		} else {
 			$providerOptions = array_merge($providerOptions, array(
-				'language' => $options['select_v2_lang'],
-				'theme'    => $options['select_v2_theme'],
-				'size'     => $options['select_v2_size'],
-				'position' => $options['select_v2_jsapi_position']
+				'language'      => $options['select_v2_lang'],
+				'theme'         => $options['select_v2_theme'],
+				'size'          => $options['select_v2_size'],
+				'position'      => $options['select_v2_jsapi_position'],
+				'custom_styles' => $options['input_v2_styles']
 			));
 
-			return new BWP_Recaptcha_Provider_V2($providerOptions, $domain);
+			return new BWP_Recaptcha_Provider_V2($providerOptions, $domain, $plugin->get_bridge());
 		}
 	}
 
@@ -87,12 +97,17 @@ abstract class BWP_Recaptcha_Provider
 	{
 		if ('invalid-response' == $error) {
 			return $this->options['invalid_response_message'];
+		} elseif ('invalid-response-cf7' == $error) {
+			return $this->options['invalid_response_message_cf7'];
 		} elseif ('invalid-keys' == $error && current_user_can('manage_options')) {
 			return __('There is some problem with your reCAPTCHA API keys, '
 				. 'please double check them.', $this->domain);
 		} else {
-			return __('Unknown error. Please contact an administrator '
-				. 'for more info.', $this->domain);
+			return sprintf(
+				__('Unknown error (%s). Please contact an administrator '
+				. 'for more info.', $this->domain),
+				$error
+			);
 		}
 	}
 
@@ -123,7 +138,7 @@ abstract class BWP_Recaptcha_Provider
 			return $errorMaps[$errorCode];
 		}
 
-		return 'unknown';
+		return $errorCode;
 	}
 
 	protected function processErrors(array $errorCodes)
