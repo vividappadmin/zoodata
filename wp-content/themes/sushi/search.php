@@ -12,8 +12,10 @@ global $wpdb;
 $pageid = get_id();
 $data = get_page( $pageid );
 
+$cat_id = get_category_by_slug('blog'); 
+
 if( !empty($_REQUEST['s']) ) {
-		query_posts(array( 's' => $_REQUEST['s'] , 'cat' => 10 ));
+		query_posts(array( 's' => $_REQUEST['s'] , 'cat' => $cat_id->term_id ));
 	}
 ?>
 

@@ -298,4 +298,11 @@ function attach_city_to_author( $author ) {
         
     return $author;
 }
+
+function _pr( $mixed )
+{	
+	print( "<pre>" );
+	print_r( $mixed );
+	print( "</pre>" );
+}
 ?>
