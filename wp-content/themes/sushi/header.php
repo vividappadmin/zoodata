@@ -22,7 +22,8 @@ global $sushi;
 <script type="text/javascript" src="<?php _e( $sushi->templateURL ); ?>/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php _e( $sushi->templateURL ); ?>/js/jquery-plugins/jquery.sushi.min.js"></script>
 <script type="text/javascript" src="<?php _e( $sushi->templateURL ); ?>/js/jquery-plugins/skrollr.js"></script>
-<script type="text/javascript" src="<?php _e( $sushi->templateURL ); ?>/js/jquery-plugins/jquery.flexslider-min.js"></script>
+<!--script type="text/javascript" src="<?php _e( $sushi->templateURL ); ?>/js/jquery-plugins/jquery.flexslider-min.js"></script-->
+<script type="text/javascript" src="<?php _e( $sushi->templateURL ); ?>/js/jquery-plugins/jquery.flexslider.js"></script>
 <script type="text/javascript" src="<?php _e( $sushi->templateURL ); ?>/js/jquery-plugins/jquery.backstretch.min.js"></script>
 <script type="text/javascript" src="<?php _e( $sushi->templateURL ); ?>/js/jquery-plugins/imagesloaded.js"></script>
 
