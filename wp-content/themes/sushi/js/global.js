@@ -347,10 +347,12 @@ function parallax_scroll( $ ){
 // Sliders
 function slider( $ ){	
 	$(".case-slides").flexslider({
-		animation: "slide",
-		controlNav: false,
-		directionNav: true,
-		animationLoop: true
+		animation 		: "slide",
+		controlNav 		: false,
+		directionNav 	: true,
+		animationLoop 	: true,
+		slideshow 		: false
+
 	});
 	
 	$(".testimonial").flexslider({
