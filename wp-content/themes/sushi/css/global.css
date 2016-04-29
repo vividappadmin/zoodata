@@ -716,6 +716,11 @@ h2 {
     margin: 0 auto;
     width: 1170px;
 }
+#customer-success .case-slides .flex-viewport ul{
+	-webkit-transform: translate3d(0px, 0px, 1px);
+	transform: translate3d(0px, 0px, 1px);
+	-ms-transform: translate3d(0px, 0px, 1px);
+}
 
 #customer-success .case-slides ul.flex-direction-nav li a {
 	position: absolute;
@@ -1802,6 +1807,12 @@ h2 {
 }
 
 .copyright {
+}
+#footer p{
+	margin-right: 10px;
+}
+#footer .main-container div:nth-last-child(3) p{
+	margin-right: 0px;
 }
 
 /*****************************
