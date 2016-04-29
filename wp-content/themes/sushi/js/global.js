@@ -346,24 +346,27 @@ function parallax_scroll( $ ){
 
 // Sliders
 function slider( $ ){	
-	$(".case-slides").flexslider({
-		animation 		: "slide",
-		controlNav 		: false,
-		directionNav 	: true,
-		animationLoop 	: true,
-		useCSS 			: false,
-		easing 			: "swing", 
+
+	$(document).ready(function(){
+
+		$(".case-slides").flexslider({
+			animation 		: "slide",
+			controlNav 		: false,
+			directionNav 	: true,
+			animationLoop 	: true,
+		});
+		
+		$(".testimonial").flexslider({
+			animation: "fade",
+			directionNav: false,
+			smoothHeight: true
+		});
+		
+		if( !$("ol.flex-control-paging li").length ) {
+			$("ol.flex-control-paging").addClass("hide");
+		}
+		
 	});
-	
-	$(".testimonial").flexslider({
-		animation: "fade",
-		directionNav: false,
-		smoothHeight: true
-	});
-	
-	if( !$("ol.flex-control-paging li").length ) {
-		$("ol.flex-control-paging").addClass("hide");
-	}
 }
 
 // Menu sliding
