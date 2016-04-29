@@ -354,6 +354,7 @@ function slider( $ ){
 			controlNav 		: false,
 			directionNav 	: true,
 			animationLoop 	: true,
+			easing 			: 'swing',
 		});
 		
 		$(".testimonial").flexslider({
@@ -365,7 +366,7 @@ function slider( $ ){
 		if( !$("ol.flex-control-paging li").length ) {
 			$("ol.flex-control-paging").addClass("hide");
 		}
-		
+
 	});
 }
 
