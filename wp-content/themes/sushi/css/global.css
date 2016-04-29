@@ -726,6 +726,29 @@ h2 {
 	height: 56px;
 }
 
+.case-slides ul.slides{
+	width: 1170px;
+	margin: 0px auto;
+}
+.case-slides ul.slides .slick-arrow{
+	position: absolute;
+	top: 50%;
+	margin-top: -30px;
+	text-indent: -9999px;
+	width: 40px;
+	height: 56px;
+	cursor: pointer;
+	border: none;
+}
+.case-slides ul.slides .slick-prev{
+	background: url("../images/flex-prev.png") no-repeat;
+	left: -180px;
+}
+.case-slides ul.slides .slick-next{
+	background: url("../images/flex-next.png") no-repeat;
+	right: -180px;
+}
+
 #customer-success .case-slides .flex-prev  {
 	background: url("../images/flex-prev.png") no-repeat;
 	left: 10px;

@@ -349,13 +349,23 @@ function slider( $ ){
 
 	$(document).ready(function(){
 
-		$(".case-slides").flexslider({
-			animation 		: "slide",
-			controlNav 		: false,
-			directionNav 	: true,
-			animationLoop 	: true,
-			startAt 		: 0
+		// $(".case-slides").flexslider({
+		// 	animation 		: "slide",
+		// 	controlNav 		: false,
+		// 	directionNav 	: true,
+		// 	animationLoop 	: true,
+		// 	startAt 		: 0
+		// });
+
+		$('.slides').slick({
+			infinite        : true,
+			slidesToShow    : 1,
+			slidesToScroll  : 1,
+			autoplay 		: true,
+			arrows          : true,
 		});
+
+
 		
 		$(".testimonial").flexslider({
 			animation: "fade",
