@@ -18,18 +18,20 @@
 					'post_status' => 'publish',
 					'orderby'=> 'date', 
 					'order' => 'DESC');
-					
-			$featured_posts = wp_get_recent_posts($args);
-
-			foreach ($featured_posts as $featured_posts) { ?>
-				<div class="list">
-					<h4><?php echo '<a href="' . get_permalink($featured_posts['ID']) . '">' .   $featured_posts['post_title'].'</a>'; ?></h4>
-					<span class="dates"><?php the_time('F j, Y'); ?></span>
-				</div>	
-		<?php
-			}
-			wp_reset_postdata();
-		?>
+				
+				$wp_query = new WP_Query($args);
+				if ($wp_query->have_posts()) :
+					while($wp_query->have_posts()): $wp_query->the_post();
+						?>
+							<div class="list">
+								<h4><a href="<?php the_permalink() ?>"><?php the_title() ?></a></h4>
+								<span class="dates"><?php the_time('F j, Y'); ?></span>
+							</div>	
+						<?php
+					endwhile;
+					wp_reset_postdata();
+				endif;
+			?>
 	</div>
 	<div id="newsletter">
 		<?php add_filter( 'mc4wp_form_css_classes', function( $classes ) {  $classes[] = 'form-inline'; return $classes; }); ?>
