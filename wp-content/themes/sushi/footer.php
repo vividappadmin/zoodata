@@ -11,7 +11,7 @@ global $sushi;
 	<footer id="footer">
 		<div class="back-to-top"><a href="#">Back to Top</a></div>		
 		<div class="main-container">
-			<p class="copyright fL">&copy; <?php echo date('Y'); ?> <a href="<?php echo get_bloginfo('url'); ?>">Zoodata</a>  |  ABN: 45 120 487 078</p>
+			<p class="copyright fL">&copy; <?php echo date('Y'); ?> <a href="<?php echo get_bloginfo('url'); ?>">Zoodata</a>  <span class="margin: 0px 5px">|</span>  ABN: 45 120 487 078</p>
 			<div id="footer-nav" class="fL">
 				<?php wp_nav_menu(array( 'menu' => 'footer')); ?>	
 			</div>
