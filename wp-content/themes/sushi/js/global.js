@@ -354,7 +354,7 @@ function slider( $ ){
 			controlNav 		: false,
 			directionNav 	: true,
 			animationLoop 	: true,
-			easing 			: 'swing',
+			startAt 		: 0
 		});
 		
 		$(".testimonial").flexslider({
