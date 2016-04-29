@@ -716,11 +716,6 @@ h2 {
     margin: 0 auto;
     width: 1170px;
 }
-#customer-success .case-slides .flex-viewport ul{
-	-webkit-transform: translate3d(0px, 0px, 1px);
-	transform: translate3d(0px, 0px, 1px);
-	-ms-transform: translate3d(0px, 0px, 1px);
-}
 
 #customer-success .case-slides ul.flex-direction-nav li a {
 	position: absolute;
