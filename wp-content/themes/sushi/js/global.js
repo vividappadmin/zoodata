@@ -351,7 +351,7 @@ function slider( $ ){
 		controlNav 		: false,
 		directionNav 	: true,
 		animationLoop 	: true,
-		initDelay 		: 5,   
+		useCSS 			: false, 
 
 	});
 	
