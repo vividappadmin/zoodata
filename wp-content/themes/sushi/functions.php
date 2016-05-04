@@ -75,6 +75,33 @@ function arphabet_widgets_init() {
 		'before_title' => '<h2 class="rounded">',
 		'after_title' => '</h2>',
 	) );
+
+	register_sidebar( array(
+		'name' => 'FooterLeft',
+		'id' => 'footer_left',
+		'before_widget' => '<div class="fL">',
+		'after_widget' => '</div>',
+		'before_title' => '',
+		'after_title' => '',
+	) );
+
+	register_sidebar( array(
+		'name' => 'FooterCustomMenu',
+		'id' => 'footer_custom_menu',
+		'before_widget' => '',
+		'after_widget' => '',
+		'before_title' => '',
+		'after_title' => '',
+	) );
+
+	register_sidebar( array(
+		'name' => 'FooterRight',
+		'id' => 'footer_right',
+		'before_widget' => '<div class="fL">',
+		'after_widget' => '</div>',
+		'before_title' => '',
+		'after_title' => '',
+	) );
 }
 add_action( 'widgets_init', 'arphabet_widgets_init' );
 

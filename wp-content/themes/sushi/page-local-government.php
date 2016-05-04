@@ -36,7 +36,7 @@ $data = get_page( $pageid );
 											'post_type'		 => 'post',
 											'category_name'  => 'local-government', 
 											'posts_per_page' => -1, 
-											'order' 		 => 'ASC',
+											'order' 		 => 'DESC',
 											'orderby'		=> 'date'
 										); 
 										$loop = new WP_Query( $args );
